@@ -1,0 +1,6 @@
+# Just example. Normally this file wont be added to VCS
+SECRET_KEY=50c+8j^a48t8*)n0ot6@snfy!dg(e#d#633nm+a@-ff-4hjk*=
+DEBUG=True
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+REDIS_DB=0
