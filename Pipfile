@@ -4,12 +4,6 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-
-[packages]
-django = "*"
-djangorestframework = "*"
-redis = "*"
-django-environ = "*"
 flake8 = "*"
 flake8-isort = "*"
 black = "==18.9b0"
@@ -17,6 +11,12 @@ pytest = "*"
 pytest-django = "*"
 freezegun = "*"
 pytest-cov = "*"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+redis = "*"
+django-environ = "*"
 psycopg2-binary = "*"
 
 [requires]
