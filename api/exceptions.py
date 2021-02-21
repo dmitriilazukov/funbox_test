@@ -13,13 +13,19 @@ def wrap_exception(wrapped):
         try:
             return wrapped(self, request)
         except ValidationError as e:
-            return Response({"status": "error", "error_details": e.get_full_details()}, status=e.status_code)
+            return Response(
+                {"status": "error", "error_details": e.get_full_details()},
+                status=e.status_code,
+            )
         except AppException as e:
-            return Response({"status": "error", "error_details": e.details}, status=e.status_code)
+            return Response(
+                {"status": "error", "error_details": e.details}, status=e.status_code
+            )
         except Exception:
             # log unexpected error to sentry or smth
             return Response(
-                {"status": "error", "error_details": "Server error"}, status=HTTP_500_INTERNAL_SERVER_ERROR
+                {"status": "error", "error_details": "Server error"},
+                status=HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
     return inner

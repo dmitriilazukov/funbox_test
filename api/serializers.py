@@ -1,6 +1,7 @@
 from urllib.parse import urlparse
 
 from django.core.validators import URLValidator
+
 from rest_framework import serializers
 
 
@@ -24,4 +25,10 @@ class DomainSaveSerializer(serializers.Serializer):
 
 class DomainFilterSerializer(serializers.Serializer):
     def get_fields(self):
-        return {"from": serializers.FloatField(required=True), "to": serializers.FloatField(required=True)}
+        # "from" is reserved python word
+        # so in order to create serializer field properly
+        # I use this method
+        return {
+            "from": serializers.FloatField(required=True),
+            "to": serializers.FloatField(required=True),
+        }

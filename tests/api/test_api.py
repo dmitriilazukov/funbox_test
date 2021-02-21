@@ -1,9 +1,10 @@
 from datetime import datetime
 
-import pytest
 from django.conf import settings
 from django.test import Client, override_settings
 from django.urls import reverse_lazy
+
+import pytest
 from redis import Redis
 
 from api.redis_db import RedisWrapper
@@ -12,7 +13,9 @@ from api.redis_db import RedisWrapper
 class TestApiViews:
     @pytest.fixture(autouse=True)
     def flush_redis(self):
-        redis = Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
+        redis = Redis(
+            host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB
+        )
         redis.delete("links")
         self.client = Client()
 
@@ -32,7 +35,9 @@ class TestApiViews:
         )
         assert response.status_code == 200
         assert response.json() == {"status": "ok"}
-        assert sorted(RedisWrapper().get_visited_domains()) == sorted(("ya.ru", "stackoverflow.com", "funbox.ru"))
+        assert sorted(RedisWrapper().get_visited_domains()) == sorted(
+            ("ya.ru", "stackoverflow.com", "funbox.ru")
+        )
 
     @pytest.mark.parametrize(
         "payload",
@@ -47,7 +52,9 @@ class TestApiViews:
     )
     def test_visited_links_view_failed(self, payload):
         url = reverse_lazy("api:visited_links")
-        response = self.client.post(url, data={"links": payload}, content_type="application/json")
+        response = self.client.post(
+            url, data={"links": payload}, content_type="application/json"
+        )
         assert response.status_code == 400
         assert len(RedisWrapper().get_visited_domains()) == 0
 
@@ -66,7 +73,14 @@ class TestApiViews:
         assert sorted(response.json()["domains"]) == sorted(domains)
 
     @pytest.mark.parametrize(
-        "from_ts,to_ts", [("qweqwe", "qweweq"), ("", "123"), ("123", ""), ("123", "qwe"), ("qwe", "12412")]
+        "from_ts,to_ts",
+        [
+            ("qweqwe", "qweweq"),
+            ("", "123"),
+            ("123", ""),
+            ("123", "qwe"),
+            ("qwe", "12412"),
+        ],
     )
     def test_visited_domains_view_failed(self, from_ts, to_ts):
         url = reverse_lazy("api:visited_domains")

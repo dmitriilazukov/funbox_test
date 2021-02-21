@@ -1,6 +1,7 @@
 from typing import Iterable, Tuple, Union
 
 from django.conf import settings
+
 from redis import Redis, RedisError
 
 from api.exceptions import RedisConnectionError
@@ -8,7 +9,9 @@ from api.exceptions import RedisConnectionError
 
 class RedisWrapper:
     def __init__(self):
-        self._redis_client = Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
+        self._redis_client = Redis(
+            host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB
+        )
 
     @staticmethod
     def _parse_domain(domain: bytes) -> str:

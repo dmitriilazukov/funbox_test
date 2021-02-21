@@ -1,4 +1,0 @@
-[tool.black]
-line-length = 115
-target-version = ['py37', 'py38']
-exclude='venv'

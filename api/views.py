@@ -15,7 +15,9 @@ class VisitedDomainsAPIView(APIView):
     def get(self, request):
         serializer = DomainFilterSerializer(data=request.query_params)
         serializer.is_valid(raise_exception=True)
-        visited_domains = RedisWrapper().get_visited_domains(serializer.data["from"], serializer.data["to"])
+        visited_domains = RedisWrapper().get_visited_domains(
+            serializer.data["from"], serializer.data["to"]
+        )
         return Response({"status": "ok", "domains": visited_domains})
 
 

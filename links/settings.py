@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import environ
 
@@ -6,7 +7,8 @@ import environ
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = environ.Env()
-environ.Env.read_env(environ.Path(str(BASE_DIR))("environ"))
+if Path(BASE_DIR, "environ").exists():
+    environ.Env.read_env(environ.Path(str(BASE_DIR), "environ"))
 
 SECRET_KEY = env("SECRET_KEY", default="test")
 
@@ -61,10 +63,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "links.wsgi.application"
 
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": os.path.join(BASE_DIR, "db.sqlite3")}}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("POSTGRES_DB", default=""),
+        "HOST": env("POSTGRES_HOST", default=""),
+        "PORT": env("POSTGRES_PORT", default=5432),
+        "USER": env("POSTGRES_USER", default=""),
+        "PASSWORD": env("POSTGRES_PASSWORD", default=""),
+    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
